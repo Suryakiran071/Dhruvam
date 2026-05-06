@@ -1,0 +1,32 @@
+<div class="min-h-screen bg-black py-20 px-10">
+  <div class="text-center mb-16">
+    <h1 class="text-white text-5xl font-bold tracking-widest uppercase">The Lineup</h1>
+    <div class="h-1 w-24 bg-gray-600 mx-auto mt-4"></div>
+  </div>
+
+  <!-- Cards Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+    
+    <!-- Member Card -->
+    <div *ngFor="let member of bandMembers" 
+         class="group relative bg-zinc-900 rounded-xl overflow-hidden shadow-2xl transition-all duration-300 hover:-translate-y-2">
+      
+      <!-- Image Container -->
+      <div class="aspect-[9/9] overflow-hidden">
+        <img [src]="member.photo" 
+             [alt]="member.name" 
+             class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500">
+      </div>
+
+      <!-- Info Overlay -->
+      <div class="p-4 bg-zinc-900 border-t border-gray-800 text-center">
+        <h2 class="text-white text-2xl font-bold tracking-tight">{{ member.name }}</h2>
+        <p class="text-gray-400 font-medium uppercase text-sm mt-1 tracking-widest">{{ member.role }}</p>
+      </div>
+
+      <!-- Subtle Accent Border -->
+      <div class="absolute bottom-0 left-0 w-full h-1 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+    </div>
+
+  </div>
+</div>
