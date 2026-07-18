@@ -1,1 +1,124 @@
-<p>project works!</p>
+<div class="min-h-screen bg-black pt-28 pb-24 px-6 md:px-10">
+
+  <!-- Page Header -->
+  <div class="max-w-7xl mx-auto text-center mb-20">
+    <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-3">Discography</p>
+    <h1 class="text-white text-5xl md:text-6xl font-bold font-cinzel tracking-wide">Our Music</h1>
+    <div class="w-20 h-px bg-white/20 mx-auto mt-6 mb-6"></div>
+    <p class="text-gray-400 max-w-xl mx-auto font-inter leading-8">
+      From original compositions to live sessions — every track is a piece of our soul.
+      Follow us on YouTube to catch every release.
+    </p>
+  </div>
+
+  <!-- Releases Grid – centered for small number of cards -->
+  <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+
+    <!-- Yathra Card -->
+    <div
+      *ngFor="let release of releases"
+      class="group relative rounded-2xl overflow-hidden border transition-all duration-500 hover:-translate-y-1 shadow-2xl"
+      [ngClass]="release.comingSoon
+        ? 'bg-zinc-950 border-zinc-800 hover:border-zinc-600'
+        : 'bg-zinc-950 border-zinc-800 hover:border-white/30'"
+    >
+
+      <!-- Top Accent Bar -->
+      <div
+        class="h-1 w-full transition-all duration-500"
+        [ngClass]="release.comingSoon
+          ? 'bg-gradient-to-r from-zinc-700 via-zinc-500 to-zinc-700'
+          : 'bg-gradient-to-r from-white/10 via-white/60 to-white/10 group-hover:via-white'"
+      ></div>
+
+      <div class="p-8">
+
+        <!-- Badge + Year -->
+        <div class="flex items-center justify-between mb-6">
+          <span
+            class="text-xs px-3 py-1 rounded-full font-inter uppercase tracking-widest font-semibold"
+            [ngClass]="getBadgeClass(release.type)"
+          >
+            {{ release.type }}
+          </span>
+          <span class="text-gray-600 text-xs font-inter tracking-widest">{{ release.year }}</span>
+        </div>
+
+        <!-- Icon -->
+        <div
+          class="w-16 h-16 rounded-full flex items-center justify-center mb-6 border transition-all duration-300"
+          [ngClass]="release.comingSoon
+            ? 'bg-zinc-900 border-zinc-700 group-hover:border-zinc-500'
+            : 'bg-zinc-900 border-zinc-800 group-hover:border-white/20'"
+        >
+          <i
+            class="text-2xl transition-colors duration-300"
+            [ngClass]="release.comingSoon
+              ? 'fas fa-clock text-zinc-500 group-hover:text-zinc-300'
+              : 'fas fa-music text-white/50 group-hover:text-white'"
+          ></i>
+        </div>
+
+        <!-- Title & Genre -->
+        <h2
+          class="text-2xl font-bold font-cinzel mb-1"
+          [ngClass]="release.comingSoon ? 'text-zinc-400' : 'text-white'"
+        >
+          {{ release.title }}
+        </h2>
+        <p class="text-gray-600 text-xs uppercase tracking-widest font-inter mb-5">{{ release.genre }}</p>
+
+        <!-- Description -->
+        <p class="text-gray-500 text-sm font-inter leading-7 mb-7">{{ release.description }}</p>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3 pt-5 border-t border-zinc-800">
+
+          <ng-container *ngIf="!release.comingSoon">
+            <a
+              [href]="release.youtubeUrl"
+              target="_blank"
+              class="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-700 text-white text-xs uppercase tracking-widest font-inter rounded-xl hover:bg-red-600 hover:border-red-600 transition-all duration-300"
+            >
+              <i class="fab fa-youtube text-base"></i>
+              Watch
+            </a>
+            <a
+              [href]="release.spotifyUrl"
+              target="_blank"
+              class="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-700 text-white text-xs uppercase tracking-widest font-inter rounded-xl hover:bg-green-600 hover:border-green-600 transition-all duration-300"
+            >
+              <i class="fab fa-spotify text-base"></i>
+              Listen
+            </a>
+          </ng-container>
+
+          <!-- Coming Soon placeholder -->
+          <ng-container *ngIf="release.comingSoon">
+            <span class="text-zinc-600 text-xs font-inter uppercase tracking-widest italic">
+              <i class="fas fa-hourglass-half mr-2"></i>Drop incoming...
+            </span>
+          </ng-container>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="text-center mt-20">
+    <p class="text-gray-500 font-inter text-sm mb-5">Stay updated on our channel</p>
+    <a
+      href="https://www.youtube.com/@Dhruvamband"
+      target="_blank"
+      class="inline-flex items-center gap-3 px-10 py-4 border border-white/20 text-white text-sm uppercase tracking-widest font-inter rounded-full hover:bg-white hover:text-black transition-all duration-300"
+    >
+      <i class="fab fa-youtube text-lg"></i>
+      Visit YouTube Channel
+    </a>
+  </div>
+
+</div>

@@ -1,32 +1,140 @@
-<div class="min-h-screen bg-black flex items-center justify-center py-20 px-10">
-  <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-    <div class="text-white space-y-6">
-      <h1 class="text-5xl font-bold tracking-tighter uppercase italic">Get in Touch!!</h1>
-      <p class="text-gray-400 text-lg leading-relaxed">
-        Whether you're looking to book <strong class="text-white">DHRUVAM</strong> for a gig, collaborate on a project, 
-        or just want to say hi, drop us a message. We try to respond to all inquiries within 48 hours.
-      </p>
-      
-      <div class="space-y-4 pt-6">
-        <div class="flex items-center space-x-4">
-          <span class="text-gray-500 uppercase tracking-widest text-sm font-bold">Email:</span>
-          <a href="mailto:contact@dhruvam.com" class="hover:text-gray-300 transition">dhruvam.com</a>
+<div class="min-h-screen bg-black flex items-center justify-center pt-28 pb-20 px-6 md:px-10">
+
+    <div class="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+        <!-- LEFT SIDE -->
+        <div class="text-white">
+
+            <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-4">Get In Touch</p>
+
+            <h1 class="text-5xl md:text-6xl font-black uppercase italic tracking-tight mb-6 font-cinzel">
+                Reach Out
+            </h1>
+
+            <div class="w-16 h-px bg-white/30 mb-8"></div>
+
+            <p class="text-gray-400 text-lg leading-8 max-w-xl font-inter">
+                Looking to book <span class="text-white font-semibold">DHRUVAM</span> for a concert,
+                collaborate on a project, invite us to an event, or simply say hello?
+                We'd love to hear from you.
+                Fill out the form or reach out through our social platforms.
+            </p>
+
+            <!-- Email -->
+            <div class="flex items-center gap-4 mt-10 mb-6">
+                <div class="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+                    <i class="fa-solid fa-envelope text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-1">Email</p>
+                    <a href="mailto:contact@dhruvam.com" class="hover:text-gray-300 transition text-base font-inter">
+                        contact&#64;dhruvam.com
+                    </a>
+                </div>
+            </div>
+
+            <!-- Social -->
+            <div class="mt-10">
+                <p class="text-gray-500 uppercase tracking-widest text-sm mb-5 font-inter">Follow Us</p>
+                <div class="flex gap-4 flex-wrap">
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/dhruvam.band/"
+                        target="_blank"
+                        class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center hover:bg-white hover:text-black transition duration-300"
+                        aria-label="Instagram">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </a>
+
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@Dhruvamband"
+                        target="_blank"
+                        class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition duration-300"
+                        aria-label="YouTube">
+                        <i class="fab fa-youtube text-2xl"></i>
+                    </a>
+
+                    <!-- Spotify -->
+                    <a href="https://spotify.com/"
+                        target="_blank"
+                        class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center hover:bg-green-600 hover:border-green-600 transition duration-300"
+                        aria-label="Spotify">
+                        <i class="fab fa-spotify text-2xl"></i>
+                    </a>
+
+                    <!-- Facebook -->
+                    <a href="https://facebook.com/"
+                        target="_blank"
+                        class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition duration-300"
+                        aria-label="Facebook">
+                        <i class="fab fa-facebook-f text-2xl"></i>
+                    </a>
+
+                </div>
+            </div>
+
         </div>
-        <div class="flex items-center space-x-4">
-          <span class="text-gray-500 uppercase tracking-widest text-sm font-bold">Social:</span>
-          <div class="flex space-x-4">
-             <a href="#" class="text-white hover:scale-110 transition">IG</a>
-             <a href="#" class="text-white hover:scale-110 transition">YT</a>
-             <a href="#" class="text-white hover:scale-110 transition">SP</a>
-          </div>
+
+        <!-- RIGHT SIDE – Contact Form -->
+        <div class="bg-zinc-950 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
+
+            <h2 class="text-3xl font-bold text-white mb-2 font-cinzel">Send us a Message</h2>
+            <p class="text-gray-400 mb-8 font-inter text-sm">We'll get back to you as soon as possible.</p>
+
+            <form class="space-y-6">
+
+                <!-- Name -->
+                <div>
+                    <label class="block text-gray-400 mb-2 text-sm font-inter uppercase tracking-widest">Name</label>
+                    <input
+                        type="text"
+                        id="contact-name"
+                        placeholder="Your Name"
+                        class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600">
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-gray-400 mb-2 text-sm font-inter uppercase tracking-widest">Email</label>
+                    <input
+                        type="email"
+                        id="contact-email"
+                        placeholder="you@example.com"
+                        class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600">
+                </div>
+
+                <!-- Subject -->
+                <div>
+                    <label class="block text-gray-400 mb-2 text-sm font-inter uppercase tracking-widest">Subject</label>
+                    <input
+                        type="text"
+                        id="contact-subject"
+                        placeholder="Booking / Collaboration / General Inquiry"
+                        class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600">
+                </div>
+
+                <!-- Message -->
+                <div>
+                    <label class="block text-gray-400 mb-2 text-sm font-inter uppercase tracking-widest">Message</label>
+                    <textarea
+                        rows="6"
+                        id="contact-message"
+                        placeholder="Tell us about your event or inquiry..."
+                        class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition resize-none font-inter placeholder-zinc-600"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    class="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-200 transition duration-300 font-inter uppercase tracking-widest text-sm">
+                    <i class="fa-solid fa-paper-plane mr-2"></i>
+                    Send Message
+                </button>
+
+            </form>
+
         </div>
-      </div>
+
     </div>
-    <div class="bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-2xl">
-        <form class="space-y-5">
-            
-        </form>
-    </div>
-    
-  </div>
+
 </div>
