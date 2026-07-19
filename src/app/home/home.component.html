@@ -59,7 +59,7 @@
 </section>
 
 <!-- ABOUT SECTION -->
-<section class="bg-zinc-950 py-32 px-8">
+<section id="about" class="bg-zinc-950 py-32 px-8">
   <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
 
     <!-- Text -->
@@ -107,70 +107,59 @@
       </h2>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-12 gap-3">
+      <svg class="animate-spin h-6 w-6 text-white/30" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+      <p class="text-zinc-600 text-xs font-inter uppercase tracking-widest">Loading shows...</p>
+    </div>
 
-      <!-- Show Card 1 -->
-      <div class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 cursor-pointer">
-        <!-- Photo (with onerror gradient fallback) -->
+    <!-- Empty State Fallbacks -->
+    <div *ngIf="!isLoading && featuredEvents.length === 0" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex flex-col items-center justify-center h-96">
+        <i class="fas fa-calendar-alt text-zinc-700 text-3xl mb-4"></i>
+        <h3 class="text-zinc-500 font-cinzel text-lg">No Shows Added</h3>
+        <p class="text-zinc-600 font-inter text-xs mt-2">New dates arriving soon</p>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex flex-col items-center justify-center h-96 hidden md:flex">
+        <i class="fas fa-calendar-alt text-zinc-700 text-3xl mb-4"></i>
+        <h3 class="text-zinc-500 font-cinzel text-lg">Stay Tuned</h3>
+        <p class="text-zinc-600 font-inter text-xs mt-2">New dates arriving soon</p>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex flex-col items-center justify-center h-96 hidden md:flex">
+        <i class="fas fa-calendar-alt text-zinc-700 text-3xl mb-4"></i>
+        <h3 class="text-zinc-500 font-cinzel text-lg">Live Soon</h3>
+        <p class="text-zinc-600 font-inter text-xs mt-2">New dates arriving soon</p>
+      </div>
+    </div>
+
+    <!-- Dynamic Event Cards -->
+    <div *ngIf="!isLoading && featuredEvents.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <div
+        *ngFor="let event of featuredEvents"
+        routerLink="/media"
+        class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 cursor-pointer"
+      >
         <div class="relative h-96 overflow-hidden">
           <img
-            src="assets/show1.jpg"
-            alt="Opening Night"
+            *ngIf="event.cover"
+            [src]="getOptimizedUrl(event.cover, 600)"
+            [alt]="event.name"
             class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            onerror="this.style.display='none'"
           />
-          <!-- Gradient bg fallback -->
-          <div class="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950"></div>
+          <!-- Gradient bg fallback (only when no cover) -->
+          <div *ngIf="!event.cover" class="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950"></div>
           <!-- Bottom fade overlay for text readability -->
           <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
           <!-- Text inside image at the bottom -->
           <div class="absolute bottom-0 left-0 right-0 p-6">
-            <span class="text-xs text-gray-400 uppercase tracking-widest font-inter block mb-1">Live Concert</span>
-            <h3 class="text-white text-xl font-bold font-cinzel leading-tight">Opening Night</h3>
-            <p class="text-gray-400 text-sm font-inter mt-1">
-              <i class="fas fa-calendar-alt mr-1.5 text-gray-500"></i>March 15, 2024
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Show Card 2 -->
-      <div class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 cursor-pointer">
-        <div class="relative h-96 overflow-hidden">
-          <img
-            src="assets/show2.jpg"
-            alt="Resonance 2024"
-            class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            onerror="this.style.display='none'"
-          />
-          <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-black"></div>
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-6">
-            <span class="text-xs text-gray-400 uppercase tracking-widest font-inter block mb-1">Live Concert</span>
-            <h3 class="text-white text-xl font-bold font-cinzel leading-tight">TedX Launch</h3>
-            <p class="text-gray-400 text-sm font-inter mt-1">
-              <i class="fas fa-calendar-alt mr-1.5 text-gray-500"></i>February 22, 2026
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Show Card 3 -->
-      <div class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 cursor-pointer">
-        <div class="relative h-96 overflow-hidden">
-          <img
-            src="assets/show3.jpg"
-            alt="Night Of Music"
-            class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            onerror="this.style.display='none'"
-          />
-          <div class="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-800 to-zinc-900"></div>
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 right-0 p-6">
-            <span class="text-xs text-gray-400 uppercase tracking-widest font-inter block mb-1">College Show</span>
-            <h3 class="text-white text-xl font-bold font-cinzel leading-tight">Candle Light</h3>
-            <p class="text-gray-400 text-sm font-inter mt-1">
-              <i class="fas fa-calendar-alt mr-1.5 text-gray-500"></i>January 10, 2025
+            <span class="text-xs text-gray-400 uppercase tracking-widest font-inter block mb-1">{{ event.category }}</span>
+            <h3 class="text-white text-xl font-bold font-cinzel leading-tight">{{ event.name }}</h3>
+            <p class="text-gray-400 text-sm font-inter mt-1.5">
+              <i class="fas fa-calendar-alt mr-1.5 text-gray-500"></i>{{ event.date }}
             </p>
           </div>
         </div>

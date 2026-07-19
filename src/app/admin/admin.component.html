@@ -1,0 +1,214 @@
+<div class="min-h-screen bg-black pt-28 pb-24 px-6 md:px-10">
+
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <div class="mb-12">
+      <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-2">Admin Panel</p>
+      <h1 class="text-white text-4xl font-bold font-cinzel">Upload Media</h1>
+      <div class="w-16 h-px bg-white/20 mt-4"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+      <!-- LEFT: Event Details -->
+      <div class="lg:col-span-1">
+        <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 sticky top-28">
+
+          <h2 class="text-white font-bold font-cinzel text-lg mb-6">Event Details</h2>
+
+          <!-- Event Name -->
+          <div class="mb-5">
+            <label class="block text-gray-500 text-xs uppercase tracking-widest font-inter mb-2">
+              Event Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              [(ngModel)]="eventName"
+              placeholder="e.g. Resonance 2024"
+              class="w-full bg-black border border-zinc-700 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-white transition font-inter placeholder-zinc-600">
+          </div>
+
+          <!-- Event Date -->
+          <div class="mb-5">
+            <label class="block text-gray-500 text-xs uppercase tracking-widest font-inter mb-2">
+              Date <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="date"
+              [(ngModel)]="eventDate"
+              class="w-full bg-black border border-zinc-700 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-white transition font-inter">
+          </div>
+
+          <!-- Category -->
+          <div class="mb-8">
+            <label class="block text-gray-500 text-xs uppercase tracking-widest font-inter mb-2">
+              Category <span class="text-red-500">*</span>
+            </label>
+            <select
+              [(ngModel)]="eventCategory"
+              class="w-full bg-black border border-zinc-700 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-white transition font-inter">
+              <option value="" disabled>Select category</option>
+              <option value="Live Concert">Live Concert</option>
+              <option value="Annual Fest">Annual Fest</option>
+              <option value="Special Show">Special Show</option>
+              <option value="Studio Session">Studio Session</option>
+              <option value="Behind The Scenes">Behind The Scenes</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <!-- Upload Button -->
+          <button
+            (click)="uploadAll()"
+            [disabled]="!canUpload || isSaving"
+            class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-widest font-inter rounded-xl transition-all duration-300 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+            <span *ngIf="!isSaving">
+              <i class="fas fa-cloud-upload-alt mr-2"></i>Upload All
+            </span>
+            <span *ngIf="isSaving" class="flex items-center gap-2">
+              <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              Uploading...
+            </span>
+          </button>
+
+          <!-- Clear done -->
+          <button
+            *ngIf="savedCount > 0"
+            (click)="clearDone()"
+            class="w-full mt-3 py-3 border border-zinc-700 text-gray-400 text-xs uppercase tracking-widest font-inter rounded-xl hover:border-white hover:text-white transition-all duration-300">
+            Clear Done ({{ savedCount }})
+          </button>
+
+          <button
+            (click)="reset()"
+            class="w-full mt-3 py-3 border border-zinc-800 text-zinc-600 text-xs uppercase tracking-widest font-inter rounded-xl hover:border-zinc-600 hover:text-zinc-400 transition-all duration-300">
+            Reset All
+          </button>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Drop Zone + Queue -->
+      <div class="lg:col-span-2">
+
+        <!-- Drop Zone -->
+        <div
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop($event)"
+          class="relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer mb-8"
+          [ngClass]="isDragging ? 'border-white bg-white/5' : 'border-zinc-700 hover:border-zinc-500'"
+          (click)="fileInput.click()"
+        >
+          <input
+            #fileInput
+            type="file"
+            multiple
+            accept="image/*,video/*"
+            class="hidden"
+            (change)="onFileSelect($event)"
+          />
+          <i class="fas fa-cloud-upload-alt text-zinc-500 text-4xl mb-4 block"></i>
+          <p class="text-white font-inter font-medium mb-1">Drop photos &amp; videos here</p>
+          <p class="text-zinc-500 text-sm font-inter">or click to browse files</p>
+          <p class="text-zinc-700 text-xs font-inter mt-3">JPG, PNG, MP4, MOV supported</p>
+        </div>
+
+        <!-- Upload Queue -->
+        <div *ngIf="uploadQueue.length > 0" class="space-y-4">
+          <h3 class="text-gray-400 text-xs uppercase tracking-widest font-inter mb-4">
+            Queue ({{ uploadQueue.length }} files)
+          </h3>
+
+          <div
+            *ngFor="let item of uploadQueue; let i = index"
+            class="bg-zinc-950 border rounded-2xl p-4 transition-all duration-300"
+            [ngClass]="{
+              'border-zinc-800': item.status === 'pending',
+              'border-white/20': item.status === 'uploading',
+              'border-green-800/50': item.status === 'done',
+              'border-red-800/50': item.status === 'error'
+            }"
+          >
+            <div class="flex items-center gap-4">
+
+              <!-- Preview / Icon -->
+              <div class="w-16 h-16 rounded-xl overflow-hidden bg-zinc-900 flex-shrink-0 flex items-center justify-center">
+                <img *ngIf="item.preview" [src]="item.preview" class="w-full h-full object-cover" />
+                <i *ngIf="!item.preview" class="fas fa-film text-zinc-500 text-2xl"></i>
+              </div>
+
+              <!-- Info -->
+              <div class="flex-1 min-w-0">
+                <!-- Editable label -->
+                <input
+                  type="text"
+                  [(ngModel)]="item.name"
+                  [disabled]="item.status !== 'pending'"
+                  class="bg-transparent text-white text-sm font-inter font-medium outline-none border-b border-zinc-700 focus:border-white transition w-full mb-1 disabled:opacity-70"
+                />
+                <div class="flex items-center gap-3">
+                  <span class="text-xs font-inter uppercase tracking-widest"
+                    [ngClass]="item.type === 'photo' ? 'text-blue-400' : 'text-purple-400'">
+                    <i [class]="item.type === 'photo' ? 'fas fa-image' : 'fas fa-film'" class="mr-1"></i>
+                    {{ item.type }}
+                  </span>
+                  <span class="text-zinc-600 text-xs font-inter">{{ (item.file.size / 1024 / 1024).toFixed(1) }} MB</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div *ngIf="item.status === 'uploading'" class="mt-2">
+                  <div class="h-1 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-white transition-all duration-300 rounded-full"
+                      [style.width.%]="item.progress"></div>
+                  </div>
+                  <span class="text-zinc-500 text-xs font-inter mt-1 block">{{ item.progress }}%</span>
+                </div>
+
+                <!-- Done -->
+                <p *ngIf="item.status === 'done'" class="text-green-400 text-xs font-inter mt-1">
+                  <i class="fas fa-check mr-1"></i>Uploaded & saved
+                </p>
+
+                <!-- Error -->
+                <p *ngIf="item.status === 'error'" class="text-red-400 text-xs font-inter mt-1">
+                  <i class="fas fa-exclamation-triangle mr-1"></i>{{ item.errorMsg }}
+                </p>
+              </div>
+
+              <!-- Remove button -->
+              <button
+                *ngIf="item.status === 'pending'"
+                (click)="removeItem(i)"
+                class="text-zinc-600 hover:text-white transition-colors duration-300 flex-shrink-0">
+                <i class="fas fa-times text-lg"></i>
+              </button>
+
+              <!-- Done icon -->
+              <div *ngIf="item.status === 'done'" class="text-green-500 flex-shrink-0">
+                <i class="fas fa-check-circle text-xl"></i>
+              </div>
+
+              <!-- Error icon -->
+              <div *ngIf="item.status === 'error'" class="text-red-500 flex-shrink-0">
+                <i class="fas fa-times-circle text-xl"></i>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div *ngIf="uploadQueue.length === 0" class="text-center py-8">
+          <p class="text-zinc-600 font-inter text-sm">No files added yet</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

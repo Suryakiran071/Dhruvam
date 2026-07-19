@@ -27,8 +27,8 @@
                 </div>
                 <div>
                     <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-1">Email</p>
-                    <a href="mailto:contact@dhruvam.com" class="hover:text-gray-300 transition text-base font-inter">
-                        contact&#64;dhruvam.com
+                    <a href="mailto:dhruvamband.live@gmail.com" class="hover:text-gray-300 transition text-base font-inter">
+                        dhruvamband.live&#64;gmail.com
                     </a>
                 </div>
             </div>
@@ -37,39 +37,26 @@
             <div class="mt-10">
                 <p class="text-gray-500 uppercase tracking-widest text-sm mb-5 font-inter">Follow Us</p>
                 <div class="flex gap-4 flex-wrap">
-
-                    <!-- Instagram -->
-                    <a href="https://www.instagram.com/dhruvam.band/"
-                        target="_blank"
+                    <a href="https://www.instagram.com/dhruvam.band/" target="_blank"
                         class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center hover:bg-white hover:text-black transition duration-300"
                         aria-label="Instagram">
                         <i class="fab fa-instagram text-2xl"></i>
                     </a>
-
-                    <!-- YouTube -->
-                    <a href="https://www.youtube.com/@Dhruvamband"
-                        target="_blank"
+                    <a href="https://www.youtube.com/@Dhruvamband" target="_blank"
                         class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition duration-300"
                         aria-label="YouTube">
                         <i class="fab fa-youtube text-2xl"></i>
                     </a>
-
-                    <!-- Spotify -->
-                    <a href="https://spotify.com/"
-                        target="_blank"
+                    <a href="https://spotify.com/" target="_blank"
                         class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center hover:bg-green-600 hover:border-green-600 transition duration-300"
                         aria-label="Spotify">
                         <i class="fab fa-spotify text-2xl"></i>
                     </a>
-
-                    <!-- Facebook -->
-                    <a href="https://facebook.com/"
-                        target="_blank"
+                    <a href="https://facebook.com/" target="_blank"
                         class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition duration-300"
                         aria-label="Facebook">
                         <i class="fab fa-facebook-f text-2xl"></i>
                     </a>
-
                 </div>
             </div>
 
@@ -78,60 +65,130 @@
         <!-- RIGHT SIDE – Contact Form -->
         <div class="bg-zinc-950 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
 
-            <h2 class="text-3xl font-bold text-white mb-2 font-cinzel">Send us a Message</h2>
-            <p class="text-gray-400 mb-8 font-inter text-sm">We'll get back to you as soon as possible.</p>
-
-            <form class="space-y-6">
-
-                <!-- Name -->
-                <div>
-                    <label class="block text-gray-400 mb-2 text-sm font-inter uppercase tracking-widest">Name</label>
-                    <input
-                        type="text"
-                        id="contact-name"
-                        placeholder="Your Name"
-                        class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600">
+            <!-- SUCCESS STATE -->
+            <div *ngIf="state === 'success'" class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mb-6">
+                    <i class="fas fa-check text-white text-3xl"></i>
                 </div>
-
-                <!-- Email -->
-                <div>
-                    <label class="block text-gray-400 mb-2 text-sm font-inter uppercase tracking-widest">Email</label>
-                    <input
-                        type="email"
-                        id="contact-email"
-                        placeholder="you@example.com"
-                        class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600">
-                </div>
-
-                <!-- Subject -->
-                <div>
-                    <label class="block text-gray-400 mb-2 text-sm font-inter uppercase tracking-widest">Subject</label>
-                    <input
-                        type="text"
-                        id="contact-subject"
-                        placeholder="Booking / Collaboration / General Inquiry"
-                        class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600">
-                </div>
-
-                <!-- Message -->
-                <div>
-                    <label class="block text-gray-400 mb-2 text-sm font-inter uppercase tracking-widest">Message</label>
-                    <textarea
-                        rows="6"
-                        id="contact-message"
-                        placeholder="Tell us about your event or inquiry..."
-                        class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition resize-none font-inter placeholder-zinc-600"></textarea>
-                </div>
-
-                <!-- Submit Button -->
-                <button
-                    type="submit"
-                    class="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-200 transition duration-300 font-inter uppercase tracking-widest text-sm">
-                    <i class="fa-solid fa-paper-plane mr-2"></i>
-                    Send Message
+                <h2 class="text-white text-2xl font-bold font-cinzel mb-3">Message Sent!</h2>
+                <p class="text-gray-400 font-inter text-sm leading-7 max-w-xs mb-8">
+                    Thanks for reaching out. We'll get back to you as soon as possible.
+                </p>
+                <button (click)="reset()"
+                    class="px-8 py-3 border border-white/20 text-white text-xs uppercase tracking-widest font-inter rounded-full hover:bg-white hover:text-black transition-all duration-300">
+                    Send Another
                 </button>
+            </div>
 
-            </form>
+            <!-- ERROR STATE -->
+            <div *ngIf="state === 'error'" class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="w-20 h-20 rounded-full bg-red-900/30 border border-red-800/50 flex items-center justify-center mb-6">
+                    <i class="fas fa-exclamation-triangle text-red-400 text-3xl"></i>
+                </div>
+                <h2 class="text-white text-2xl font-bold font-cinzel mb-3">Something went wrong</h2>
+                <p class="text-gray-400 font-inter text-sm leading-7 max-w-xs mb-8">
+                    Couldn't send your message. Please try again or reach us directly at
+                    <a href="mailto:dhruvamband.live@gmail.com" class="text-white underline">dhruvamband.live&#64;gmail.com</a>
+                </p>
+                <button (click)="reset()"
+                    class="px-8 py-3 border border-white/20 text-white text-xs uppercase tracking-widest font-inter rounded-full hover:bg-white hover:text-black transition-all duration-300">
+                    Try Again
+                </button>
+            </div>
+
+            <!-- FORM (idle or sending) -->
+            <div *ngIf="state === 'idle' || state === 'sending'">
+
+                <h2 class="text-3xl font-bold text-white mb-2 font-cinzel">Send us a Message</h2>
+                <p class="text-gray-400 mb-8 font-inter text-sm">We'll get back to you as soon as possible.</p>
+
+                <form (ngSubmit)="sendMessage()" class="space-y-6" #contactForm="ngForm">
+
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-gray-400 mb-2 text-xs font-inter uppercase tracking-widest">
+                            Name <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="contact-name"
+                            name="name"
+                            [(ngModel)]="form.name"
+                            required
+                            placeholder="Your Name"
+                            [disabled]="state === 'sending'"
+                            class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600 disabled:opacity-50">
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-gray-400 mb-2 text-xs font-inter uppercase tracking-widest">
+                            Email <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="email"
+                            id="contact-email"
+                            name="email"
+                            [(ngModel)]="form.email"
+                            required
+                            placeholder="you@example.com"
+                            [disabled]="state === 'sending'"
+                            class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600 disabled:opacity-50">
+                    </div>
+
+                    <!-- Subject -->
+                    <div>
+                        <label class="block text-gray-400 mb-2 text-xs font-inter uppercase tracking-widest">Subject</label>
+                        <input
+                            type="text"
+                            id="contact-subject"
+                            name="subject"
+                            [(ngModel)]="form.subject"
+                            placeholder="Booking / Collaboration / General Inquiry"
+                            [disabled]="state === 'sending'"
+                            class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600 disabled:opacity-50">
+                    </div>
+
+                    <!-- Message -->
+                    <div>
+                        <label class="block text-gray-400 mb-2 text-xs font-inter uppercase tracking-widest">
+                            Message <span class="text-red-500">*</span>
+                        </label>
+                        <textarea
+                            rows="6"
+                            id="contact-message"
+                            name="message"
+                            [(ngModel)]="form.message"
+                            required
+                            placeholder="Tell us about your event or inquiry..."
+                            [disabled]="state === 'sending'"
+                            class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition resize-none font-inter placeholder-zinc-600 disabled:opacity-50"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button
+                        type="submit"
+                        [disabled]="state === 'sending' || !form.name || !form.email || !form.message"
+                        class="w-full bg-white text-black font-bold py-4 rounded-xl transition duration-300 font-inter uppercase tracking-widest text-sm flex items-center justify-center gap-3 hover:bg-gray-200 disabled:opacity-60 disabled:cursor-not-allowed">
+
+                        <!-- Sending spinner -->
+                        <span *ngIf="state === 'sending'" class="flex items-center gap-3">
+                            <svg class="animate-spin h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            Sending...
+                        </span>
+
+                        <!-- Idle state -->
+                        <span *ngIf="state === 'idle'">
+                            <i class="fa-solid fa-paper-plane mr-2"></i>Send Message
+                        </span>
+
+                    </button>
+
+                </form>
+            </div>
 
         </div>
 
