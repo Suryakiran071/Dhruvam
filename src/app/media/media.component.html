@@ -56,17 +56,14 @@
 
     <ng-container *ngIf="allDocs.length > 0">
 
-      <!-- EVENTS VIEW -->
+      <!-- EVENTS VIEW (grid, unchanged) -->
       <div *ngIf="activeFilter === 'events'" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div *ngFor="let event of events"
           class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 cursor-pointer">
           <div class="relative h-96 overflow-hidden">
-            <img
-              *ngIf="event.cover"
-              [src]="getOptimizedUrl(event.cover, 600)"
-              [alt]="event.name"
-              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            />
+            <img *ngIf="event.cover"
+              [src]="getOptimizedUrl(event.cover, 600)" [alt]="event.name"
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
             <div *ngIf="!event.cover" class="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
             <div class="absolute top-4 right-4">
@@ -85,86 +82,30 @@
         </div>
       </div>
 
-      <!-- ALL VIEW -->
-      <div *ngIf="activeFilter === 'all'" class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <ng-container *ngFor="let item of allItemsShuffled">
-          <ng-container *ngTemplateOutlet="mediaCard; context: { $implicit: item }"></ng-container>
-        </ng-container>
+      <!-- ALL VIEW (masonry) -->
+      <div *ngIf="activeFilter === 'all'" class="max-w-7xl mx-auto masonry-grid">
+        <div *ngFor="let item of allItemsShuffled" class="masonry-item">
+          <ng-container *ngTemplateOutlet="mediaCard; context: { $implicit: item, list: allItemsShuffled }"></ng-container>
+        </div>
       </div>
 
-      <!-- PHOTOS VIEW -->
-      <div *ngIf="activeFilter === 'photos'" class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <ng-container *ngFor="let item of photosShuffled">
-          <ng-container *ngTemplateOutlet="mediaCard; context: { $implicit: item }"></ng-container>
-        </ng-container>
+      <!-- PHOTOS VIEW (masonry) -->
+      <div *ngIf="activeFilter === 'photos'" class="max-w-7xl mx-auto masonry-grid">
+        <div *ngFor="let item of photosShuffled" class="masonry-item">
+          <ng-container *ngTemplateOutlet="mediaCard; context: { $implicit: item, list: photosShuffled }"></ng-container>
+        </div>
       </div>
 
-      <!-- VIDEOS VIEW -->
-      <div *ngIf="activeFilter === 'videos'" class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- VIDEOS VIEW (regular grid) -->
+      <div *ngIf="activeFilter === 'videos'" class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <ng-container *ngFor="let item of videosShuffled">
-          <ng-container *ngTemplateOutlet="mediaCard; context: { $implicit: item }"></ng-container>
+          <ng-container *ngTemplateOutlet="mediaCard; context: { $implicit: item, list: videosShuffled }"></ng-container>
         </ng-container>
       </div>
 
     </ng-container>
 
   </ng-container>
-
-  <!-- Shared Media Card Template -->
-  <ng-template #mediaCard let-item>
-    <div class="group relative rounded-2xl overflow-hidden border border-zinc-800 hover:border-white/25 transition-all duration-500 hover:-translate-y-1 shadow-2xl cursor-pointer">
-
-      <!-- PHOTO CARD -->
-      <ng-container *ngIf="item.type === 'photo'">
-        <div class="relative h-72 overflow-hidden">
-          <img
-            [src]="getOptimizedUrl(item.cloudinaryUrl, 600)"
-            [alt]="item.label"
-            class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-          <div class="absolute top-4 left-4">
-            <span class="bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full font-inter uppercase tracking-widest border border-white/10">
-              <i class="fas fa-image mr-1.5 text-gray-400"></i>Photo
-            </span>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 p-5">
-            <p class="text-gray-400 text-xs font-inter uppercase tracking-widest mb-1">{{ item.event }}</p>
-            <h3 class="text-white text-base font-bold font-cinzel leading-tight">{{ item.label }}</h3>
-            <p class="text-gray-500 text-xs font-inter mt-1.5">
-              <i class="fas fa-calendar-alt mr-1.5"></i>{{ item.eventDate }}
-            </p>
-          </div>
-        </div>
-      </ng-container>
-
-      <!-- VIDEO CARD -->
-      <ng-container *ngIf="item.type === 'video'">
-        <div class="relative h-72 overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
-              <i class="fas fa-play text-white text-xl ml-1"></i>
-            </div>
-          </div>
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-          <div class="absolute top-4 left-4">
-            <span class="bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full font-inter uppercase tracking-widest border border-white/10">
-              <i class="fas fa-film mr-1.5 text-gray-400"></i>Video
-            </span>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 p-5">
-            <p class="text-gray-400 text-xs font-inter uppercase tracking-widest mb-1">{{ item.event }}</p>
-            <h3 class="text-zinc-300 text-base font-bold font-cinzel leading-tight">{{ item.label }}</h3>
-            <p class="text-gray-600 text-xs font-inter mt-1.5">
-              <i class="fas fa-calendar-alt mr-1.5"></i>{{ item.eventDate }}
-            </p>
-          </div>
-        </div>
-      </ng-container>
-
-    </div>
-  </ng-template>
 
   <!-- Bottom Notice -->
   <div class="max-w-7xl mx-auto mt-16 border border-dashed border-zinc-800 rounded-2xl p-10 text-center">
@@ -181,6 +122,107 @@
         <i class="fab fa-youtube"></i> YouTube
       </a>
     </div>
+  </div>
+
+</div>
+
+<!-- ======================== SHARED MEDIA CARD TEMPLATE ======================== -->
+<ng-template #mediaCard let-item let-list="list">
+  <div class="group relative rounded-2xl overflow-hidden border border-zinc-800 hover:border-white/25 transition-all duration-500 hover:-translate-y-1 shadow-xl"
+    [class.cursor-pointer]="item.type === 'photo'"
+    (click)="item.type === 'photo' ? openLightbox(list, item) : null">
+
+    <!-- PHOTO CARD -->
+    <ng-container *ngIf="item.type === 'photo'">
+      <div class="relative overflow-hidden">
+        <img
+          [src]="getOptimizedUrl(item.cloudinaryUrl, 600)"
+          [alt]="item.label"
+          class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 block"
+          loading="lazy"
+        />
+        <!-- Hover overlay with expand icon -->
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-12 h-12 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm">
+            <i class="fas fa-expand text-white text-sm"></i>
+          </div>
+        </div>
+        <div class="absolute top-3 left-3">
+          <span class="bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full font-inter uppercase tracking-widest border border-white/10">
+            <i class="fas fa-image mr-1 text-gray-400"></i>Photo
+          </span>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/40 to-transparent">
+          <p class="text-gray-400 text-xs font-inter uppercase tracking-widest mb-0.5">{{ item.event }}</p>
+          <h3 class="text-white text-sm font-bold font-cinzel leading-tight">{{ item.label }}</h3>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- VIDEO CARD -->
+    <ng-container *ngIf="item.type === 'video'">
+      <div class="relative h-64 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
+            <i class="fas fa-play text-white text-xl ml-1"></i>
+          </div>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+        <div class="absolute top-3 left-3">
+          <span class="bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full font-inter uppercase tracking-widest border border-white/10">
+            <i class="fas fa-film mr-1 text-gray-400"></i>Video
+          </span>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-4">
+          <p class="text-gray-400 text-xs font-inter uppercase tracking-widest mb-0.5">{{ item.event }}</p>
+          <h3 class="text-zinc-300 text-sm font-bold font-cinzel leading-tight">{{ item.label }}</h3>
+          <p class="text-gray-600 text-xs font-inter mt-1">
+            <i class="fas fa-calendar-alt mr-1"></i>{{ item.eventDate }}
+          </p>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</ng-template>
+
+<!-- ======================== LIGHTBOX OVERLAY ======================== -->
+<div *ngIf="lightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
+
+  <!-- Counter -->
+  <div class="lb-counter" (click)="$event.stopPropagation()">
+    {{ lightboxIndex + 1 }} / {{ lightboxItems.length }}
+  </div>
+
+  <!-- Close -->
+  <button class="lb-close" (click)="closeLightbox()" aria-label="Close">
+    <i class="fas fa-times"></i>
+  </button>
+
+  <!-- Prev -->
+  <button *ngIf="lightboxItems.length > 1" class="lb-btn lb-btn-prev" (click)="$event.stopPropagation(); lightboxPrev()" aria-label="Previous">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+
+  <!-- Image -->
+  <img
+    *ngIf="currentLightboxItem"
+    [src]="getOptimizedUrl(currentLightboxItem.cloudinaryUrl, 1600)"
+    [alt]="currentLightboxItem.label"
+    class="lightbox-img"
+    (click)="$event.stopPropagation()"
+  />
+
+  <!-- Next -->
+  <button *ngIf="lightboxItems.length > 1" class="lb-btn lb-btn-next" (click)="$event.stopPropagation(); lightboxNext()" aria-label="Next">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+
+  <!-- Caption -->
+  <div class="lb-caption" (click)="$event.stopPropagation()">
+    <p *ngIf="currentLightboxItem" class="text-white text-sm font-cinzel font-bold">{{ currentLightboxItem.label }}</p>
+    <p *ngIf="currentLightboxItem" class="text-gray-500 text-xs font-inter mt-1 uppercase tracking-widest">{{ currentLightboxItem.event }} · {{ currentLightboxItem.eventDate }}</p>
   </div>
 
 </div>

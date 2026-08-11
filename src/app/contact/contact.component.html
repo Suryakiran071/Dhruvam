@@ -102,67 +102,57 @@
                 <h2 class="text-3xl font-bold text-white mb-2 font-cinzel">Send us a Message</h2>
                 <p class="text-gray-400 mb-8 font-inter text-sm">We'll get back to you as soon as possible.</p>
 
-                <form (ngSubmit)="sendMessage()" class="space-y-6" #contactForm="ngForm">
+                <form (ngSubmit)="sendMessage()" class="space-y-5" #contactForm="ngForm">
 
                     <!-- Name -->
-                    <div>
-                        <label class="block text-gray-400 mb-2 text-xs font-inter uppercase tracking-widest">
-                            Name <span class="text-red-500">*</span>
-                        </label>
+                    <div class="field-wrap">
                         <input
                             type="text"
                             id="contact-name"
                             name="name"
                             [(ngModel)]="form.name"
                             required
-                            placeholder="Your Name"
-                            [disabled]="state === 'sending'"
-                            class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600 disabled:opacity-50">
+                            placeholder=" "
+                            [disabled]="state === 'sending'" />
+                        <label for="contact-name" class="field-label">Name <span class="req">*</span></label>
                     </div>
 
                     <!-- Email -->
-                    <div>
-                        <label class="block text-gray-400 mb-2 text-xs font-inter uppercase tracking-widest">
-                            Email <span class="text-red-500">*</span>
-                        </label>
+                    <div class="field-wrap">
                         <input
                             type="email"
                             id="contact-email"
                             name="email"
                             [(ngModel)]="form.email"
                             required
-                            placeholder="you@example.com"
-                            [disabled]="state === 'sending'"
-                            class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600 disabled:opacity-50">
+                            placeholder=" "
+                            [disabled]="state === 'sending'" />
+                        <label for="contact-email" class="field-label">Email <span class="req">*</span></label>
                     </div>
 
                     <!-- Subject -->
-                    <div>
-                        <label class="block text-gray-400 mb-2 text-xs font-inter uppercase tracking-widest">Subject</label>
+                    <div class="field-wrap">
                         <input
                             type="text"
                             id="contact-subject"
                             name="subject"
                             [(ngModel)]="form.subject"
-                            placeholder="Booking / Collaboration / General Inquiry"
-                            [disabled]="state === 'sending'"
-                            class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition font-inter placeholder-zinc-600 disabled:opacity-50">
+                            placeholder=" "
+                            [disabled]="state === 'sending'" />
+                        <label for="contact-subject" class="field-label">Subject</label>
                     </div>
 
                     <!-- Message -->
-                    <div>
-                        <label class="block text-gray-400 mb-2 text-xs font-inter uppercase tracking-widest">
-                            Message <span class="text-red-500">*</span>
-                        </label>
+                    <div class="field-wrap">
                         <textarea
                             rows="6"
                             id="contact-message"
                             name="message"
                             [(ngModel)]="form.message"
                             required
-                            placeholder="Tell us about your event or inquiry..."
-                            [disabled]="state === 'sending'"
-                            class="w-full bg-black border border-zinc-700 rounded-xl px-5 py-4 text-white outline-none focus:border-white transition resize-none font-inter placeholder-zinc-600 disabled:opacity-50"></textarea>
+                            placeholder=" "
+                            [disabled]="state === 'sending'"></textarea>
+                        <label for="contact-message" class="field-label">Message <span class="req">*</span></label>
                     </div>
 
                     <!-- Submit Button -->

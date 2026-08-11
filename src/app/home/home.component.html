@@ -1,26 +1,48 @@
-<!-- HERO SECTION -->
+<!-- ===================== CURSOR GLOW ===================== -->
+<div
+  class="cursor-glow hidden md:block"
+  [style.left.px]="cursorX"
+  [style.top.px]="cursorY"
+></div>
+
+<!-- ===================== HERO SECTION ===================== -->
 <section class="h-screen relative flex flex-col justify-center items-center overflow-hidden">
 
-  <!-- Background: try image first, fallback to gradient -->
+  <!-- Parallax Background Image -->
   <img
     src="assets/band-bg.jpg"
     alt=""
-    class="absolute inset-0 w-full h-full object-cover opacity-30"
+    class="absolute inset-0 w-full object-cover opacity-30"
+    style="height: 130%; top: 0; will-change: transform;"
+    [style.transform]="'scale(1.05) translateY(-' + parallaxOffset + 'px)'"
     onerror="this.style.display='none'"
   />
 
-  <!-- Gradient Background (always shown, acts as fallback/overlay) -->
+  <!-- Gradient Background (fallback / overlay) -->
   <div class="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-zinc-900"></div>
+
+  <!-- Floating Particles -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div
+      *ngFor="let p of particles"
+      class="particle"
+      [style.left.%]="p.left"
+      [style.top.%]="p.top"
+      [style.width.px]="p.size"
+      [style.height.px]="p.size"
+      [style.animation-duration]="p.duration + 's'"
+      [style.animation-delay]="p.delay + 's'"
+    ></div>
+  </div>
 
   <!-- Radial glow accent -->
   <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.04)_0%,transparent_70%)]"></div>
 
   <!-- Dark Overlay -->
-  <div class="absolute inset-0 bg-black/50"></div>
+  <div class="absolute inset-0 bg-black/55"></div>
 
   <!-- Hero Content -->
   <div class="relative z-10 text-center px-6 flex flex-col items-center">
-
     <img
       src="assets/logo.png"
       alt="DHRUVAM Band Logo"
@@ -39,7 +61,6 @@
       >
         <i class="fas fa-music"></i> Our Music
       </a>
-
       <a
         routerLink="/contact"
         class="inline-flex items-center gap-2 px-8 py-3 bg-white text-black hover:bg-gray-200 transition duration-300 text-sm tracking-widest uppercase font-inter font-semibold rounded-full"
@@ -47,23 +68,23 @@
         <i class="fas fa-paper-plane"></i> Contact Us
       </a>
     </div>
-
   </div>
 
   <!-- Scroll Indicator -->
-  <div class="absolute bottom-10 flex flex-col items-center gap-2 animate-bounce text-gray-500">
+  <div class="absolute bottom-10 flex flex-col items-center gap-2 animate-bounce text-gray-500 z-10">
     <span class="text-xs tracking-widest uppercase font-inter">Scroll</span>
     <i class="fas fa-chevron-down text-sm"></i>
   </div>
 
 </section>
 
-<!-- ABOUT SECTION -->
+
+<!-- ===================== ABOUT SECTION ===================== -->
 <section id="about" class="bg-zinc-950 py-32 px-8">
   <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
 
     <!-- Text -->
-    <div class="lg:w-1/2">
+    <div class="lg:w-1/2 fade-up">
       <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-4">Who We Are</p>
       <h2 class="text-white text-4xl md:text-5xl font-bold mb-8 font-cinzel">
         About Us
@@ -82,7 +103,7 @@
     </div>
 
     <!-- Logo / Image -->
-    <div class="lg:w-1/2 flex justify-center">
+    <div class="lg:w-1/2 flex justify-center fade-up delay-300">
       <div class="relative">
         <div class="absolute -inset-4 bg-white/5 rounded-full blur-3xl"></div>
         <img
@@ -96,11 +117,11 @@
   </div>
 </section>
 
-<!-- FEATURED PERFORMANCES -->
+<!-- ===================== FEATURED PERFORMANCES ===================== -->
 <section class="bg-black py-32 px-8">
   <div class="max-w-7xl mx-auto">
 
-    <div class="text-center mb-20">
+    <div class="text-center mb-20 fade-up">
       <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-4">On Stage</p>
       <h2 class="text-white text-4xl md:text-5xl font-bold font-cinzel">
         Featured Performances
@@ -118,43 +139,44 @@
 
     <!-- Empty State Fallbacks -->
     <div *ngIf="!isLoading && featuredEvents.length === 0" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex flex-col items-center justify-center h-96">
+      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex flex-col items-center justify-center h-96 fade-up">
         <i class="fas fa-calendar-alt text-zinc-700 text-3xl mb-4"></i>
         <h3 class="text-zinc-500 font-cinzel text-lg">No Shows Added</h3>
         <p class="text-zinc-600 font-inter text-xs mt-2">New dates arriving soon</p>
       </div>
-      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex flex-col items-center justify-center h-96 hidden md:flex">
+      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex-col items-center justify-center h-96 hidden md:flex fade-up delay-200">
         <i class="fas fa-calendar-alt text-zinc-700 text-3xl mb-4"></i>
         <h3 class="text-zinc-500 font-cinzel text-lg">Stay Tuned</h3>
         <p class="text-zinc-600 font-inter text-xs mt-2">New dates arriving soon</p>
       </div>
-      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex flex-col items-center justify-center h-96 hidden md:flex">
+      <div class="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-950/40 p-12 text-center flex-col items-center justify-center h-96 hidden md:flex fade-up delay-400">
         <i class="fas fa-calendar-alt text-zinc-700 text-3xl mb-4"></i>
         <h3 class="text-zinc-500 font-cinzel text-lg">Live Soon</h3>
         <p class="text-zinc-600 font-inter text-xs mt-2">New dates arriving soon</p>
       </div>
     </div>
 
-    <!-- Dynamic Event Cards -->
+    <!-- Dynamic Event Cards (with 3D tilt) -->
     <div *ngIf="!isLoading && featuredEvents.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
       <div
-        *ngFor="let event of featuredEvents"
+        *ngFor="let event of featuredEvents; let i = index"
         routerLink="/media"
-        class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 cursor-pointer"
+        class="tilt-card group relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 cursor-pointer fade-up"
+        [class.delay-100]="i === 0"
+        [class.delay-300]="i === 1"
+        [class.delay-500]="i === 2"
+        (mousemove)="onCardTilt($event)"
+        (mouseleave)="onCardReset($event)"
       >
-        <div class="relative h-96 overflow-hidden">
+        <div class="relative h-96 overflow-hidden rounded-2xl">
           <img
             *ngIf="event.cover"
             [src]="getOptimizedUrl(event.cover, 600)"
             [alt]="event.name"
             class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
-          <!-- Gradient bg fallback (only when no cover) -->
           <div *ngIf="!event.cover" class="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950"></div>
-          <!-- Bottom fade overlay for text readability -->
           <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-          <!-- Text inside image at the bottom -->
           <div class="absolute bottom-0 left-0 right-0 p-6">
             <span class="text-xs text-gray-400 uppercase tracking-widest font-inter block mb-1">{{ event.category }}</span>
             <h3 class="text-white text-xl font-bold font-cinzel leading-tight">{{ event.name }}</h3>
@@ -164,67 +186,48 @@
           </div>
         </div>
       </div>
-
     </div>
+
   </div>
 </section>
 
-<!-- STATS SECTION -->
-<section class="bg-zinc-950 py-24 px-8">
+<!-- ===================== STATS SECTION ===================== -->
+<section id="stats-section" class="bg-zinc-950 py-24 px-8">
   <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
 
-    <div class="group">
+    <div *ngFor="let stat of stats; let i = index"
+      class="group fade-up"
+      [class.delay-100]="i === 0"
+      [class.delay-200]="i === 1"
+      [class.delay-300]="i === 2"
+      [class.delay-400]="i === 3"
+    >
       <h3 class="text-white text-5xl font-bold font-cinzel group-hover:scale-110 transition-transform duration-300">
-        50+
+        {{ displayStat(stat) }}
       </h3>
       <div class="w-8 h-px bg-white/30 mx-auto my-3"></div>
-      <p class="text-gray-400 font-inter text-sm uppercase tracking-widest">Live Shows</p>
-    </div>
-
-    <div class="group">
-      <h3 class="text-white text-5xl font-bold font-cinzel group-hover:scale-110 transition-transform duration-300">
-        12
-      </h3>
-      <div class="w-8 h-px bg-white/30 mx-auto my-3"></div>
-      <p class="text-gray-400 font-inter text-sm uppercase tracking-widest">Members</p>
-    </div>
-
-    <div class="group">
-      <h3 class="text-white text-5xl font-bold font-cinzel group-hover:scale-110 transition-transform duration-300">
-        5K+
-      </h3>
-      <div class="w-8 h-px bg-white/30 mx-auto my-3"></div>
-      <p class="text-gray-400 font-inter text-sm uppercase tracking-widest">Audience Reached</p>
-    </div>
-
-    <div class="group">
-      <h3 class="text-white text-5xl font-bold font-cinzel group-hover:scale-110 transition-transform duration-300">
-        100%
-      </h3>
-      <div class="w-8 h-px bg-white/30 mx-auto my-3"></div>
-      <p class="text-gray-400 font-inter text-sm uppercase tracking-widest">Passion</p>
+      <p class="text-gray-400 font-inter text-sm uppercase tracking-widest">{{ stat.label }}</p>
     </div>
 
   </div>
 </section>
 
-<!-- CTA SECTION -->
+<!-- ===================== CTA SECTION ===================== -->
 <section class="relative bg-black py-32 px-8 text-center overflow-hidden">
-  <!-- Subtle glow -->
   <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.04)_0%,transparent_70%)]"></div>
 
   <div class="relative z-10">
-    <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-4">Stay Connected</p>
-    <h2 class="text-white text-4xl md:text-5xl font-bold font-cinzel mb-6">
+    <p class="text-gray-500 uppercase tracking-widest text-xs font-inter mb-4 fade-up">Stay Connected</p>
+    <h2 class="text-white text-4xl md:text-5xl font-bold font-cinzel mb-6 fade-up delay-100">
       Ready To Experience The Music?
     </h2>
 
-    <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10 font-inter leading-8">
+    <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10 font-inter leading-8 fade-up delay-200">
       Follow us on social media and stay updated with our latest performances,
       releases, and events.
     </p>
 
-    <div class="flex flex-wrap justify-center gap-5">
+    <div class="flex flex-wrap justify-center gap-5 fade-up delay-300">
       <a
         href="https://www.instagram.com/dhruvam.band/"
         target="_blank"
@@ -243,7 +246,7 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ===================== FOOTER ===================== -->
 <footer class="bg-zinc-950 py-12 border-t border-zinc-800">
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 px-8">
 

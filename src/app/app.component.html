@@ -1,3 +1,29 @@
+<!-- ======= PAGE LOADER (first visit only) ======= -->
+<div *ngIf="showLoader" class="page-loader">
+  <img src="assets/logo.png" alt="DHRUVAM" class="loader-logo" onerror="this.style.display='none'" />
+  <p class="loader-text">DHRUVAM</p>
+  <div class="loader-bar-track">
+    <div class="loader-bar-fill"></div>
+  </div>
+</div>
+
+<!-- ======= SCROLL PROGRESS BAR ======= -->
+<div class="scroll-progress-bar" [style.width.%]="scrollProgress"></div>
+
+<!-- ======= NAVBAR ======= -->
 <app-navbar></app-navbar>
 
-<router-outlet></router-outlet>
+<!-- ======= PAGE CONTENT with transition ======= -->
+<div class="page-content" [class.transitioning]="isTransitioning">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- ======= BACK TO TOP BUTTON ======= -->
+<button
+  *ngIf="showBackToTop"
+  (click)="scrollToTop()"
+  class="back-to-top-btn"
+  aria-label="Back to top"
+>
+  <i class="fas fa-chevron-up"></i>
+</button>
