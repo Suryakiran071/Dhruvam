@@ -55,19 +55,34 @@ export class CloudinaryService {
     });
   }
 
-  // Builds optimized URL for display (auto format, quality, and optional width)
+  // Builds optimized URL for images (converts video URLs to JPG thumbnail)
   getOptimizedUrl(url: string, width?: number): string {
     if (!url || !url.includes('cloudinary.com')) return url || '';
-    
+
     let targetUrl = url;
-    // If it's a video, convert extension to .jpg so Cloudinary serves a video frame thumbnail
+    // If it's a video URL, convert to jpg for thumbnail display
     if (url.includes('/video/upload/')) {
       targetUrl = url.replace(/\.[^/.]+$/, '.jpg');
     }
 
-    const transform = width
-      ? `f_auto,q_auto,w_${width}`
-      : 'f_auto,q_auto';
+    const transform = width ? `f_auto,q_auto,w_${width}` : 'f_auto,q_auto';
     return targetUrl.replace('/upload/', `/upload/${transform}/`);
+  }
+
+  // Returns a proper video streaming URL (mp4, quality auto) — no jpg conversion
+  getVideoUrl(url: string): string {
+    if (!url || !url.includes('cloudinary.com')) return url || '';
+    // Ensure the URL ends in a video format (keep original extension or force mp4)
+    const videoUrl = url.includes('/video/upload/')
+      ? url.replace(/\.[^/.]+$/, '.mp4')
+      : url;
+    return videoUrl.replace('/upload/', '/upload/f_auto,q_auto/');
+  }
+
+  // Returns a poster thumbnail (first frame) for a Cloudinary video URL
+  getVideoPosterUrl(url: string): string {
+    if (!url || !url.includes('/video/upload/')) return '';
+    const jpgUrl = url.replace(/\.[^/.]+$/, '.jpg');
+    return jpgUrl.replace('/upload/', '/upload/f_jpg,q_auto,so_0,w_800/');
   }
 }

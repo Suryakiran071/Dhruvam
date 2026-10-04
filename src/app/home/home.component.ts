@@ -173,7 +173,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // ─── Stat display formatter ─────────────────────────
   displayStat(stat: StatItem): string {
     if (stat.isK) {
-      return Math.floor(stat.current / 1000) + 'K+';
+      if (stat.current >= 1000) {
+        return (stat.current / 1000).toFixed(stat.current % 1000 === 0 ? 0 : 1) + 'K+';
+      }
+      return stat.current + '+';
     }
     return stat.current + stat.suffix;
   }

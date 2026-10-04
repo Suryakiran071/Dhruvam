@@ -6,7 +6,7 @@
     <h1 class="text-white text-5xl md:text-6xl font-bold font-cinzel tracking-wide">Media</h1>
     <div class="w-20 h-px bg-white/20 mx-auto mt-6 mb-6"></div>
     <p class="text-gray-400 max-w-xl mx-auto font-inter leading-8">
-      Photos and videos from our performances, studio sessions, and behind-the-scenes moments.
+      Photos, videos and live performances from the world of DHRUVAM.
     </p>
   </div>
 
@@ -24,29 +24,34 @@
     <!-- Filter Tabs -->
     <div class="max-w-7xl mx-auto flex justify-center gap-3 mb-14 flex-wrap">
       <button (click)="setFilter('all')"
-        class="px-6 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
+        class="px-5 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
         [ngClass]="activeFilter === 'all' ? 'bg-white text-black font-semibold' : 'bg-zinc-900 text-gray-400 border border-zinc-700 hover:border-white/30 hover:text-white'">
         All
       </button>
       <button (click)="setFilter('events')"
-        class="px-6 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
+        class="px-5 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
         [ngClass]="activeFilter === 'events' ? 'bg-white text-black font-semibold' : 'bg-zinc-900 text-gray-400 border border-zinc-700 hover:border-white/30 hover:text-white'">
         <i class="fas fa-calendar mr-2"></i>Events
       </button>
       <button (click)="setFilter('photos')"
-        class="px-6 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
+        class="px-5 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
         [ngClass]="activeFilter === 'photos' ? 'bg-white text-black font-semibold' : 'bg-zinc-900 text-gray-400 border border-zinc-700 hover:border-white/30 hover:text-white'">
         <i class="fas fa-image mr-2"></i>Photos
       </button>
       <button (click)="setFilter('videos')"
-        class="px-6 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
+        class="px-5 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
         [ngClass]="activeFilter === 'videos' ? 'bg-white text-black font-semibold' : 'bg-zinc-900 text-gray-400 border border-zinc-700 hover:border-white/30 hover:text-white'">
         <i class="fas fa-film mr-2"></i>Videos
       </button>
+      <button (click)="setFilter('performances')"
+        class="px-5 py-2 rounded-full text-xs uppercase tracking-widest font-inter transition-all duration-300"
+        [ngClass]="activeFilter === 'performances' ? 'bg-white text-black font-semibold' : 'bg-zinc-900 text-gray-400 border border-zinc-700 hover:border-white/30 hover:text-white'">
+        <i class="fab fa-youtube mr-2"></i>Performances
+      </button>
     </div>
 
-    <!-- Empty State -->
-    <div *ngIf="allDocs.length === 0" class="max-w-7xl mx-auto text-center py-24">
+    <!-- Empty State (for media tabs) -->
+    <div *ngIf="allDocs.length === 0 && activeFilter !== 'performances'" class="max-w-7xl mx-auto text-center py-24">
       <i class="fas fa-images text-zinc-700 text-5xl mb-4"></i>
       <p class="text-zinc-500 font-inter">No media uploaded yet.</p>
       <a routerLink="/admin" class="inline-block mt-6 px-6 py-2 border border-zinc-700 text-zinc-400 text-xs uppercase tracking-widest font-inter rounded-full hover:border-white hover:text-white transition-all duration-300">
@@ -54,9 +59,72 @@
       </a>
     </div>
 
+    <!-- ── PERFORMANCES (YouTube) ────────────────────── -->
+    <div *ngIf="activeFilter === 'performances'" class="max-w-7xl mx-auto">
+
+      <!-- Empty state -->
+      <div *ngIf="performances.length === 0" class="text-center py-24">
+        <i class="fab fa-youtube text-zinc-700 text-5xl mb-4"></i>
+        <p class="text-zinc-500 font-inter mb-2">No YouTube performances added yet.</p>
+        <a routerLink="/admin" class="inline-block mt-4 px-6 py-2 border border-zinc-700 text-zinc-400 text-xs uppercase tracking-widest font-inter rounded-full hover:border-white hover:text-white transition-all duration-300">
+          Add via Admin Panel
+        </a>
+      </div>
+
+      <div *ngIf="performances.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let p of performances"
+          class="group relative rounded-2xl overflow-hidden border border-zinc-800 hover:border-white/30 transition-all duration-500 cursor-pointer"
+          (click)="openYoutubeVideo(p.youtubeId)">
+
+          <!-- YouTube Thumbnail -->
+          <div class="relative overflow-hidden">
+            <img
+              [src]="getYoutubeThumbnail(p.youtubeId)"
+              [alt]="p.title"
+              class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700"
+              loading="lazy"
+              (error)="onThumbnailError($event, p.youtubeId)"
+            />
+            <!-- Dark overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+
+            <!-- YouTube play button -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-16 h-16 rounded-full bg-red-600/90 border-2 border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-500 transition-all duration-300 shadow-2xl">
+                <i class="fab fa-youtube text-white text-2xl"></i>
+              </div>
+            </div>
+
+            <!-- YouTube badge -->
+            <div class="absolute top-3 right-3">
+              <span class="bg-red-600 text-white text-xs px-2.5 py-1 rounded-full font-inter font-semibold flex items-center gap-1">
+                <i class="fab fa-youtube text-xs"></i> YouTube
+              </span>
+            </div>
+          </div>
+
+          <!-- Info -->
+          <div class="p-5 bg-zinc-950">
+            <h3 class="text-white font-bold font-cinzel text-base leading-tight mb-2 group-hover:text-gray-200 transition-colors">
+              {{ p.title }}
+            </h3>
+            <div class="flex items-center justify-between">
+              <p class="text-gray-500 text-xs font-inter">
+                <i class="fas fa-calendar-alt mr-1.5"></i>{{ p.date }}
+              </p>
+              <span class="text-xs text-red-400 font-inter flex items-center gap-1 group-hover:text-red-300 transition-colors">
+                Watch on YouTube <i class="fas fa-external-link-alt text-xs"></i>
+              </span>
+            </div>
+            <p *ngIf="p.description" class="text-gray-600 text-xs font-inter mt-2 leading-5 line-clamp-2">{{ p.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <ng-container *ngIf="allDocs.length > 0">
 
-      <!-- EVENTS VIEW (grid, unchanged) -->
+      <!-- EVENTS VIEW -->
       <div *ngIf="activeFilter === 'events'" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div *ngFor="let event of events"
           class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 cursor-pointer">
@@ -96,7 +164,7 @@
         </div>
       </div>
 
-      <!-- VIDEOS VIEW (regular grid) -->
+      <!-- VIDEOS VIEW -->
       <div *ngIf="activeFilter === 'videos'" class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <ng-container *ngFor="let item of videosShuffled">
           <ng-container *ngTemplateOutlet="mediaCard; context: { $implicit: item, list: videosShuffled }"></ng-container>
@@ -126,13 +194,13 @@
 
 </div>
 
-<!-- ======================== SHARED MEDIA CARD TEMPLATE ======================== -->
+<!-- ════════ SHARED MEDIA CARD TEMPLATE ════════ -->
 <ng-template #mediaCard let-item let-list="list">
   <div class="group relative rounded-2xl overflow-hidden border border-zinc-800 hover:border-white/25 transition-all duration-500 hover:-translate-y-1 shadow-xl"
     [class.cursor-pointer]="item.type === 'photo'"
     (click)="item.type === 'photo' ? openLightbox(list, item) : null">
 
-    <!-- PHOTO CARD -->
+    <!-- ── PHOTO CARD ── -->
     <ng-container *ngIf="item.type === 'photo'">
       <div class="relative overflow-hidden">
         <img
@@ -141,7 +209,7 @@
           class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 block"
           loading="lazy"
         />
-        <!-- Hover overlay with expand icon -->
+        <!-- Hover expand icon -->
         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
           <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-12 h-12 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm">
             <i class="fas fa-expand text-white text-sm"></i>
@@ -159,27 +227,28 @@
       </div>
     </ng-container>
 
-    <!-- VIDEO CARD -->
+    <!-- ── VIDEO CARD (playable) ── -->
     <ng-container *ngIf="item.type === 'video'">
-      <div class="relative h-64 overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black"></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
-            <i class="fas fa-play text-white text-xl ml-1"></i>
+      <div class="relative rounded-2xl overflow-hidden bg-black">
+        <!-- Native HTML5 video player -->
+        <video
+          [src]="getVideoUrl(item.cloudinaryUrl)"
+          [poster]="getVideoPosterUrl(item.cloudinaryUrl)"
+          controls
+          preload="metadata"
+          class="w-full h-auto max-h-72 object-contain bg-black rounded-t-2xl"
+          style="display:block;"
+        ></video>
+        <!-- Metadata below the player -->
+        <div class="p-4 bg-zinc-950">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="bg-zinc-800 text-gray-400 text-xs px-2 py-0.5 rounded-full font-inter uppercase tracking-widest border border-zinc-700">
+              <i class="fas fa-film mr-1"></i>Video
+            </span>
+            <span class="text-gray-600 text-xs font-inter">{{ item.eventDate }}</span>
           </div>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-        <div class="absolute top-3 left-3">
-          <span class="bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full font-inter uppercase tracking-widest border border-white/10">
-            <i class="fas fa-film mr-1 text-gray-400"></i>Video
-          </span>
-        </div>
-        <div class="absolute bottom-0 left-0 right-0 p-4">
-          <p class="text-gray-400 text-xs font-inter uppercase tracking-widest mb-0.5">{{ item.event }}</p>
-          <h3 class="text-zinc-300 text-sm font-bold font-cinzel leading-tight">{{ item.label }}</h3>
-          <p class="text-gray-600 text-xs font-inter mt-1">
-            <i class="fas fa-calendar-alt mr-1"></i>{{ item.eventDate }}
-          </p>
+          <p class="text-gray-400 text-xs font-inter uppercase tracking-widest">{{ item.event }}</p>
+          <h3 class="text-white text-sm font-bold font-cinzel leading-tight mt-0.5">{{ item.label }}</h3>
         </div>
       </div>
     </ng-container>
@@ -187,25 +256,22 @@
   </div>
 </ng-template>
 
-<!-- ======================== LIGHTBOX OVERLAY ======================== -->
+<!-- ════════ LIGHTBOX ════════ -->
 <div *ngIf="lightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
 
-  <!-- Counter -->
   <div class="lb-counter" (click)="$event.stopPropagation()">
     {{ lightboxIndex + 1 }} / {{ lightboxItems.length }}
   </div>
 
-  <!-- Close -->
   <button class="lb-close" (click)="closeLightbox()" aria-label="Close">
     <i class="fas fa-times"></i>
   </button>
 
-  <!-- Prev -->
-  <button *ngIf="lightboxItems.length > 1" class="lb-btn lb-btn-prev" (click)="$event.stopPropagation(); lightboxPrev()" aria-label="Previous">
+  <button *ngIf="lightboxItems.length > 1" class="lb-btn lb-btn-prev"
+    (click)="$event.stopPropagation(); lightboxPrev()" aria-label="Previous">
     <i class="fas fa-chevron-left"></i>
   </button>
 
-  <!-- Image -->
   <img
     *ngIf="currentLightboxItem"
     [src]="getOptimizedUrl(currentLightboxItem.cloudinaryUrl, 1600)"
@@ -214,15 +280,16 @@
     (click)="$event.stopPropagation()"
   />
 
-  <!-- Next -->
-  <button *ngIf="lightboxItems.length > 1" class="lb-btn lb-btn-next" (click)="$event.stopPropagation(); lightboxNext()" aria-label="Next">
+  <button *ngIf="lightboxItems.length > 1" class="lb-btn lb-btn-next"
+    (click)="$event.stopPropagation(); lightboxNext()" aria-label="Next">
     <i class="fas fa-chevron-right"></i>
   </button>
 
-  <!-- Caption -->
   <div class="lb-caption" (click)="$event.stopPropagation()">
     <p *ngIf="currentLightboxItem" class="text-white text-sm font-cinzel font-bold">{{ currentLightboxItem.label }}</p>
-    <p *ngIf="currentLightboxItem" class="text-gray-500 text-xs font-inter mt-1 uppercase tracking-widest">{{ currentLightboxItem.event }} · {{ currentLightboxItem.eventDate }}</p>
+    <p *ngIf="currentLightboxItem" class="text-gray-500 text-xs font-inter mt-1 uppercase tracking-widest">
+      {{ currentLightboxItem.event }} · {{ currentLightboxItem.eventDate }}
+    </p>
   </div>
 
 </div>

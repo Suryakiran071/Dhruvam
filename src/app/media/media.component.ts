@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FirestoreService, MediaDoc } from '../services/firestore.service';
+import { FirestoreService, MediaDoc, YoutubePerformance } from '../services/firestore.service';
 import { CloudinaryService } from '../services/cloudinary.service';
 
 export interface BandEvent {
@@ -12,6 +12,8 @@ export interface BandEvent {
   itemCount: number;
 }
 
+type FilterType = 'all' | 'events' | 'photos' | 'videos' | 'performances';
+
 @Component({
   selector: 'app-media',
   standalone: true,
@@ -20,7 +22,7 @@ export interface BandEvent {
   styleUrl: './media.component.css'
 })
 export class MediaComponent implements OnInit, OnDestroy {
-  activeFilter: 'all' | 'events' | 'photos' | 'videos' = 'all';
+  activeFilter: FilterType = 'all';
   isLoading = true;
 
   // Raw data from Firestore
@@ -32,10 +34,14 @@ export class MediaComponent implements OnInit, OnDestroy {
   photosShuffled: MediaDoc[] = [];
   videosShuffled: MediaDoc[] = [];
 
+  // YouTube Performances
+  performances: YoutubePerformance[] = [];
+  performancesLoading = false;
+
   // ── Lightbox ──────────────────────────────────────
   lightboxOpen = false;
   lightboxIndex = 0;
-  lightboxItems: MediaDoc[] = [];  // only photos shown in lightbox
+  lightboxItems: MediaDoc[] = [];
 
   private isBrowser: boolean;
 
@@ -49,7 +55,12 @@ export class MediaComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     try {
-      this.allDocs = await this.firestoreService.getMedia();
+      const [media, performances] = await Promise.all([
+        this.firestoreService.getMedia(),
+        this.firestoreService.getYoutubePerformances()
+      ]);
+      this.allDocs = media;
+      this.performances = performances;
       this.buildViews();
     } catch (err) {
       console.error('Failed to load media:', err);
@@ -75,7 +86,6 @@ export class MediaComponent implements OnInit, OnDestroy {
 
   // ── Lightbox controls ─────────────────────────────
   openLightbox(items: MediaDoc[], clickedItem: MediaDoc) {
-    // Only open lightbox for photos
     const photos = items.filter(i => i.type === 'photo');
     const idx = photos.findIndex(i => i.cloudinaryUrl === clickedItem.cloudinaryUrl);
     if (idx === -1 || photos.length === 0) return;
@@ -100,6 +110,24 @@ export class MediaComponent implements OnInit, OnDestroy {
 
   get currentLightboxItem(): MediaDoc | null {
     return this.lightboxItems[this.lightboxIndex] ?? null;
+  }
+
+  // ── YouTube helpers ───────────────────────────────
+  getYoutubeThumbnail(youtubeId: string): string {
+    return `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+  }
+
+  onThumbnailError(event: Event, youtubeId: string) {
+    const target = event.target as HTMLImageElement;
+    if (target && !target.src.includes('hqdefault.jpg')) {
+      target.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+    }
+  }
+
+  openYoutubeVideo(youtubeId: string) {
+    if (this.isBrowser) {
+      window.open(`https://www.youtube.com/watch?v=${youtubeId}`, '_blank', 'noopener,noreferrer');
+    }
   }
 
   // ── Data helpers ──────────────────────────────────
@@ -145,7 +173,15 @@ export class MediaComponent implements OnInit, OnDestroy {
     return this.cloudinaryService.getOptimizedUrl(url, width);
   }
 
-  setFilter(f: 'all' | 'events' | 'photos' | 'videos') {
+  getVideoUrl(url: string): string {
+    return this.cloudinaryService.getVideoUrl(url);
+  }
+
+  getVideoPosterUrl(url: string): string {
+    return this.cloudinaryService.getVideoPosterUrl(url);
+  }
+
+  setFilter(f: FilterType) {
     this.activeFilter = f;
   }
 }
